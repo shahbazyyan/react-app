@@ -1,23 +1,59 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import TodoList from './Todolist';
+import TodoForm from './TodoForm';
+import TodoFooter from './TodoFooter';
 
 function App() {
+
+  const [todos, setTodos] = useState([
+      {
+        id: Math.random(),
+        text: "Learn React",
+        isComplated: false
+      },
+      {
+        id: Math.random(),
+        text: "Learn Css",
+        isComplated: false
+      },
+      {
+        id: Math.random(),
+        text: "Watch a movie",
+        isComplated: false
+      },
+    ]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TodoForm onAdd={((text) => {
+        setTodos([
+          ...todos,
+          {
+            id: Math.random,
+            text: text,
+            isComplated: false
+          }
+        ])
+      })}/>
+      <TodoList todos = {todos}
+      onDelete={(todo)=> {
+        setTodos(todos.filter((t) => t.id !== todo.id));
+      }}
+      onChange={(newTodo) => {
+        setTodos(todos.map((item) => {
+           if(item.id === newTodo.id) {
+             return newTodo
+           }
+           return item
+         }));
+       }}
+      />
+      <TodoFooter todos={todos}
+      onClearComplated={() => {
+        setTodos(todos.filter((todo)=> !todo.isComplated));
+      }}
+      />
     </div>
   );
 }
